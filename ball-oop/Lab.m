@@ -16,6 +16,7 @@ classdef Lab<handle
     methods
         function obj = Lab(num_balls, size, itterations, mass_vec, speed_vec,x0_vec)
             % Constructor
+            % lab = Lab(2,10000,2000,[2,4],[0, -2],[300, 500])
             obj.size = size;
             obj.numBalls = num_balls;
             obj.num_itterations = itterations;
@@ -27,14 +28,15 @@ classdef Lab<handle
         
         function all_balls  = initialize_balls(obj)
             % initialize fish vector, called from the constructor
-            all_balls = cell(1, obj.numBalls);
+%             all_balls = cell(1, obj.numBalls);
+            all_balls = [];
             for ii = 1:obj.numBalls
                 all_balls{ii} = Ball(obj.masses(ii),obj.balls_speeds(ii),obj.opening_pos(ii));
             end
         end
           
 %         function collision(obj1, obj2 , r)
-        function collision(balls_array , r)
+        function collision(obj,balls_array , r)
             ball1 = balls_array{1};
             ball2 = balls_array{2};
             if abs(ball1.location - ball2.location)<r

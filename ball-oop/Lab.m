@@ -6,7 +6,7 @@ classdef Lab<handle
         numBalls = 2;
         size = 1e5;
         num_itterations;
-        r = 1 ;  % collision radius
+        r = 5 ;  % collision radius
         all_balls;
         masses;
         balls_speeds;
@@ -28,14 +28,14 @@ classdef Lab<handle
         
         function all_balls  = initialize_balls(obj)
             % initialize fish vector, called from the constructor
-%             all_balls = cell(1, obj.numBalls);
+            %             all_balls = cell(1, obj.numBalls);
             all_balls = [];
             for ii = 1:obj.numBalls
                 all_balls{ii} = Ball(obj.masses(ii),obj.balls_speeds(ii),obj.opening_pos(ii));
             end
         end
-          
-%         function collision(obj1, obj2 , r)
+        
+        %         function collision(obj1, obj2 , r)
         function collision(obj,balls_array , r)
             ball1 = balls_array{1};
             ball2 = balls_array{2};
@@ -52,22 +52,36 @@ classdef Lab<handle
             end
         end
         
-         function run_simulation(obj)
+        function run_simulation(obj)
             % Move the fish around
             for ii = 1:obj.num_itterations
                 obj.collision(obj.all_balls , 5)
                 cla
                 hold on
+                xlim([0 1000])
                 for jj = 1:length(obj.all_balls)
                     ball = obj.all_balls{jj};
                     ball.move();
                     ball.plot();
-                    
                 end
+                
+                set(gcf,'color','w'); % set figure background to white
+                drawnow;
+                frame = getframe(1);
+                im = frame2im(frame);
+                [imind,cm] = rgb2ind(im,256);
+                outfile = 'balls_gif.gif';
+                
+                if ii ==1
+                    imwrite(imind,cm,outfile,'gif','DelayTime',0.1,'loopcount',inf);
+                else
+                    imwrite(imind,cm,outfile,'gif','DelayTime',0.1,'writemode','append');
+                end
+
             end
         end
- 
-    
+        
+        
     end
 end
 
